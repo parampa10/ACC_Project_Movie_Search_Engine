@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-
+//movieSorter class
 public class MovieSorter {
     int sortCriteria;
     MovieInfo[] movies;
@@ -27,14 +27,14 @@ public class MovieSorter {
         private int releaseYear;
         private String director;
         private Double rating;
-
+        //constructor
         public MovieInfo(String title, int releaseYear, String director,Double rating) {
             this.title = title;
             this.releaseYear = releaseYear;
             this.director = director;
             this.rating= rating;
         }
-
+        //getter methods
         public String getTitle() {
             return title;
         }
@@ -79,7 +79,7 @@ public class MovieSorter {
                 // Read the movie data from the row
                 String title = row.getCell(0).getStringCellValue();
                 String releaseYearString = row.getCell(1).getStringCellValue();
-                
+                //changing type of rating from string to double
                 String rating_str = row.getCell(5).getStringCellValue();
                 Double rating =Double.valueOf(rating_str);
                 int releaseYear;
@@ -116,34 +116,35 @@ public class MovieSorter {
                 // Sort the movie array based on the selected criteria
                 switch (ms.getSortCriteria()) {
                     case 1:
+                    	//using mergesort for sorting 
                         mergeSort(ms.movies, 0, ms.movies.length - 1, "title");
                         System.out.println("Sorted by title:");
                         for (MovieInfo movie : ms.movies) {
                             System.out.println(movie.getTitle());
                         }
                         break;
-                    case 2:
+                    case 2://by year
                         mergeSort(ms.movies, 0, ms.movies.length - 1, "year");
                         System.out.println("Sorted by release year:");
                         for (MovieInfo movie : ms.movies) {
                             System.out.println(movie.getTitle() + "   " + movie.getReleaseYear());
                         }
                         break;
-                    case 3:
+                    case 3://by director
                         mergeSort(ms.movies, 0, ms.movies.length - 1, "director");
                         System.out.println("Sorted by director:");
                         for (MovieInfo movie : ms.movies) {
                             System.out.println(movie.getTitle() + "   " + movie.getDirector());
                         }
                         break;
-                    case 4:
+                    case 4://rating
                         mergeSort(ms.movies, 0, ms.movies.length - 1, "rating");
                         System.out.println("Sorted by Rating:");
                         for (MovieInfo movie : ms.movies) {
                             System.out.println(movie.getTitle() + "   " + movie.getRating());
                         }
                         break;
-                    case 0:
+                    case 0://exiting
                     	System.out.println("_______________________________________________________\n");
                         return;
                     default:
@@ -155,7 +156,7 @@ public class MovieSorter {
         }
     }
 
-    // Merge sort
+    // Merge sort code
        
         private static void mergeSort(MovieInfo[] arr, int l, int r, String sortBy) {
             if (l < r) {
@@ -227,7 +228,7 @@ public class MovieSorter {
         }
         
         
-    }     // Sort the movies by year using merge sort
+    }     
      
 
 

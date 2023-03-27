@@ -16,11 +16,13 @@ public class Filter_Movies {
     private Map<String, Map<String, String>> movies = new HashMap<>();
 
     public void loadMoviesFromExcel(String filePath) throws IOException {
+    	//file stream for excel sheet
         FileInputStream inputStream = new FileInputStream(new File(filePath));
         Workbook workbook = WorkbookFactory.create(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
-
+        //reading row by row
         for (Row row : sheet) {
+        	//getting all data from one row
             Map<String, String> movieDetails = new HashMap<>();
             Cell titleCell = row.getCell(0);
             Cell yearCell = row.getCell(1);
@@ -39,12 +41,15 @@ public class Filter_Movies {
 
     public Map<String, Map<String, String>> filterMovies(String filterType, String filterValue) {
         Map<String, Map<String, String>> filteredMovies = new HashMap<>();
+        //geting movies
         for (Map.Entry<String, Map<String, String>> entry : movies.entrySet()) {
             Map<String, String> movie = entry.getValue();
+            //if movie filter criteria matches 
             if (filterType.equals("genre")) {
                 String[] genres = movie.get("genre").split(" ");
                 for (String genre : genres) {
                     if (genre.equalsIgnoreCase(filterValue)) {
+                    	//then we put the movie in map and at last print it
                         filteredMovies.put(entry.getKey(), movie);
                         break;
                     }
@@ -71,7 +76,7 @@ public class Filter_Movies {
         Filter_Movies engine = new Filter_Movies();
         engine.loadMoviesFromExcel("src/movies_ex.xlsx");
         
-        
+        //infinite loop for next inputs
         while(true) {
         	
         	
@@ -92,7 +97,7 @@ public class Filter_Movies {
             String filterValue = scanner.nextLine();
 
             Map<String, Map<String, String>> filteredMovies;
-
+            //choices for different filters
             switch (filterType) {
                 case "1":
                     filteredMovies = engine.filterMovies("year", filterValue);
@@ -115,6 +120,7 @@ public class Filter_Movies {
                 System.out.println("No movies found.");
             } else {
                 System.out.println("Filtered movies:");
+                //printing filtered movies
                 for (Map.Entry<String, Map<String, String>> entry : filteredMovies.entrySet()) {
                     System.out.println(entry.getKey() + ": " + entry.getValue());
                 }

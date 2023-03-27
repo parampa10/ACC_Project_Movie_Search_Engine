@@ -12,28 +12,34 @@ import org.jsoup.select.Elements;
 public class WebCrawler {
     private static final String URL = "https://www.imdb.com/list/ls500768076/?sort=list_order,asc&st_dt=&mode=detail&page=";
     private static final int MAX_MOVIES = 100;
-
+    
+    //main method 
     public static void main(String[] args,int movies_size) {
         FileWriter writer;
         try {
+        	//putting data to csv
             writer = new FileWriter("src/movies.csv");
             writer.append("Title,Year,Genre,Director,Cast,Rating,Description\n");
-
+            //counters
             int movieCount = 0;
             int page = 1;
             while (movieCount < movies_size) {
+            	//page urls appending page numbers
                 String pageUrl = URL + page;
                 Document doc = null;
                 try {
+                	//connecting to page
                     doc = Jsoup.connect(pageUrl).get();
                     System.out.println("Connection established successfully... For page-"+page);
                 } catch (SocketTimeoutException e) {
                     System.out.println("Connection timed out. Retrying...");
                     continue;
                 }
+                //getting elements
                 Elements movies = doc.select("div.lister-item-content");
 
                 for (Element movie : movies) {
+                	//getting each attributes for movies from url
                     String title = movie.select("h3.lister-item-header > a").text();
                     String year = movie.select("h3.lister-item-header > span.lister-item-year").text().replaceAll("[^\\d]", "").substring(0,4);
                     String genre = movie.select("span.genre").text();
@@ -42,6 +48,7 @@ public class WebCrawler {
                     String rating = "";
                     String description = "";
                     Elements ratingElement = movie.select("span.ipl-rating-star__rating");
+                    //processing rating and description and cast to get rid of extra spaces
                     if (ratingElement.size() > 0) {
                         rating = ratingElement.get(0).text().split(" ")[0];
                     }
@@ -52,15 +59,15 @@ public class WebCrawler {
                     if (cast.contains(director)) {
                         cast = cast.replace(director, "");
                     }
-
+                    //adding data to csv file by separating with "," comma
                     writer.append(title.replace(",", "") + "," + year + "," + genre.replace(",", "") + "," + director.replace(",", "") + "," + cast.replace(",", "") + "," + rating + "," + description.replace(",", "") + "\n");
-
+                    
                     movieCount++;
                     if (movieCount >= movies_size) {
                         break;
                     }
                 }
-
+                //page increment
                 page++;
             }
 
@@ -74,6 +81,7 @@ public class WebCrawler {
 
             String line;
             int rowNumber = 0;
+            //reading data from csv and puting it in xlsx file
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
@@ -82,7 +90,7 @@ public class WebCrawler {
                     row.createCell(i).setCellValue(data[i]);
                 }
             }
-
+            //saving xlsx files
             FileOutputStream outputStream = new FileOutputStream("src/movies_ex.xlsx");
             workbook.write(outputStream);
             workbook.close();

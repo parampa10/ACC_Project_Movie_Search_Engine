@@ -11,7 +11,6 @@ public class MovieSearchEngine {
 		
 		//pre-processing web crawling which creates .csv & .xlsx files for data of (N) movies from url.
 		
-		//
 		Scanner s = new Scanner(System.in);
 		System.out.print("Enter number of movies you want in database:");
 		int movie_numbers=s.nextInt();
@@ -19,7 +18,6 @@ public class MovieSearchEngine {
 		WebCrawler.main(args, movie_numbers);
 		
 		//user choice of feature
-		
 		
 		System.out.printf("%s","*************************************************************************\n");
 		System.out.printf("%45s","Movie Search Engine\n");
@@ -50,7 +48,7 @@ public class MovieSearchEngine {
 					System.out.println("Good Bye!!\nSo sorry to see you leaving :( ");
 					return;
 				
-				//searching feature
+				//searching feature and calling feature files
 				case 1:
 					System.out.println("_______________________________________________________");
 					System.out.println("Searching Movies");
